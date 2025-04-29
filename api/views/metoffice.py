@@ -1,4 +1,6 @@
 from rest_framework import generics
+from rest_framework.response import Response
+from backend.tasks import update_tempratures
 from rest_framework.pagination import LimitOffsetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -11,7 +13,7 @@ class MonthApiView(generics.ListAPIView, LimitOffsetPagination):
     serializer_class = MonthWiseTempratureSerializer
     queryset = MonthWiseTempratureDbModel.objects.all()
     filterset_fields = ("month", "region", "year", "temperature",)
-
+        
 
 class SeasonApiView(generics.ListAPIView, LimitOffsetPagination):
     filter_backends = [DjangoFilterBackend]

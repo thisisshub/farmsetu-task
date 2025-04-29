@@ -11,18 +11,41 @@ class BaseDbModel(models.Model):
     
     class Meta:
         abstract = True
+        
+class RegionDBModel(BaseDbModel):
+    region = models.CharField(max_length=30, blank=False, null=True, unique=True)
+    
+    class Meta:
+        verbose_name_plural = "Regions"
+        unique_together = ("region",)
+
+    @property
+    def region_name(self):
+        return self.region
+
+class SeasonDbModel(BaseDbModel):
+    season = models.CharField(max_length=5, blank=False, null=True, unique=True)
+    
+    class Meta:
+        verbose_name_plural = "Seasons"
+        unique_together = ("season",)
 
 class MonthWiseTempratureDbModel(BaseDbModel):
-    region = models.CharField(max_length=30, blank=False, null=True, choices=RegionEnum.choices())
-    month = models.CharField(max_length=5, blank=False, null=True, choices=MonthEnum.choices())
+    month = models.CharField(max_length=5, blank=False, null=True)
     temperature = models.CharField(max_length=6, blank=False, null=True)
+    region = models.ForeignKey(RegionDBModel, on_delete=models.CASCADE)
     year = models.CharField(max_length=4, blank=False, null=True)
     
     class Meta:
         verbose_name_plural = "Month Wise Temprature"
+        unique_together = ("year", "month", "region",)
     
 class SeasonWiseTempratureDbModel(BaseDbModel):
-    region = models.CharField(max_length=30, blank=False, null=True, choices=RegionEnum.choices())
-    season = models.CharField(max_length=5, blank=False, null=True, choices=SeasonEnum.choices())
     temperature = models.CharField(max_length=6, blank=False, null=True)
+    region = models.ForeignKey(RegionDBModel, on_delete=models.CASCADE)
+    season = models.ForeignKey(SeasonDbModel, on_delete=models.CASCADE)
     year = models.CharField(max_length=4, blank=False, null=True)
+    
+    class Meta:
+        verbose_name_plural = "Season Wise Temprature"
+        unique_together = ("year", "season", "region",)

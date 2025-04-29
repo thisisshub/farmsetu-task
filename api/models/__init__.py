@@ -1,1 +1,1 @@
-from .model import MonthWiseTempratureDbModel, SeasonWiseTempratureDbModel
+from .model import MonthWiseTempratureDbModel, SeasonWiseTempratureDbModel, RegionDBModel, SeasonDbModel
